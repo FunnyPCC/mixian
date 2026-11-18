@@ -11,7 +11,7 @@ const opsStatus = status => opsBadge(status, status==='已完成'?'is-good':stat
 const opsOrderWindow = order => order.slot?`预约 ${order.slot}`:windowName(order);
 const opsOrderItems = order => `<div class="ops-item-list">${order.items.map(item=>`<div class="ops-item"><div><strong>${esc(item.name)}</strong><small>${esc(itemSpec(item))}</small></div><b>×${item.qty}</b></div>`).join('')}</div>`;
 const opsPhone = (label,phone) => phone?`<button type="button" class="ops-button ops-phone" data-act="contact" data-id="${esc(phone)}" aria-label="${esc(label)}">${icon('phone')}</button>`:'';
-const opsUserNote = (note,detail=false) => note?.trim()?`<span class="ops-user-note">${detail?'<b>备注：</b>':icon('clipboard')}<span>${esc(note)}</span></span>`:'';
+const opsUserNote = note => note?.trim()?`<span class="order-note"><b>备注：</b><span>${esc(note)}</span></span>`:'';
 const opsClosedFilters = [['已完结','全部'],['已完成','已完成'],['已取消','已取消']];
 const opsSearchEntry = () => opsButton('搜索订单','ops-search','',{glyph:'search',variant:'ops-search-entry'});
 let opsDates = {start:'',end:''}, opsQuery = '', opsSearchSource;

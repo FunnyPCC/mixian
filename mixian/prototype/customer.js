@@ -213,7 +213,7 @@ detail = function(order){
       ${orderNumberField(order)}
     </section>
     <section class="card address-card">${heading('配送信息','location')}<div class="address-summary"><b>${esc(order.address)}</b><div class="address-contact"><span>${esc(order.person)}</span><span>${esc(order.phone)}</span></div></div>
-      ${order.note?`<p class="delivery-note"><b>备注：</b><span>${esc(order.note)}</span></p>`:''}</section>
+      ${order.note?.trim()?`<p class="order-note"><b>备注：</b><span>${esc(order.note)}</span></p>`:''}</section>
     ${foodBill(order.items,order.fee,true,true)}
     <div class="action-bar detail-actions">
       ${riderPhone?`<button type="button" class="soft-button" data-act="contact" data-id="${esc(riderPhone)}">${icon('phone')} 联系骑手</button>`:''}

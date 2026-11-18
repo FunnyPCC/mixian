@@ -154,7 +154,7 @@
       </section>
       <section class="ops-card mx-receiving">${opsSectionTitle('收货信息','location')}
         <div class="ops-contact-row"><div><strong>${esc(order.address)}</strong><p class="ops-copy">${esc(order.person)} · ${esc(order.phone)}</p></div>${opsPhone('联系收货人',order.phone)}</div>
-        ${opsUserNote(order.note,true)}
+        ${opsUserNote(order.note)}
       </section>
       ${rider?`<section class="ops-card mx-receiving">${opsSectionTitle('骑手信息','rider')}
         <div class="ops-contact-row"><div><strong>${esc(order.riderName||'配送骑手')}</strong>${order.riderPhone?`<p class="ops-copy">${esc(order.riderPhone)}</p>`:''}</div>${opsPhone('联系骑手',order.riderPhone)}</div>

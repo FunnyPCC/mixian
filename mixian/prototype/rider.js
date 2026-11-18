@@ -66,7 +66,7 @@
         <span class="rx-window">${icon('clock')}${esc(time)}</span>
         <div class="ops-contact-row"><div class="rx-destination"><span class="ops-glyph">${icon('location')}</span><div><small>送达地点</small><strong>${esc(riderDestination(order,!owns))}</strong>
           ${owns?`<div class="rx-recipient"><b>${esc(order.person)}</b><span>${esc(order.phone)}</span></div>`:''}</div></div>${owns?opsPhone('联系收货人',order.phone):''}</div>
-        ${opsUserNote(order.note,true)}
+        ${opsUserNote(order.note)}
         ${!owns?'<p class="ops-copy">接单后显示完整地址和联系人</p>':''}
         ${order.status==='已取消'&&order.reason?`<p class="ops-copy">取消原因：${esc(order.reason)}</p>`:''}
         ${orderNumberField(order)}

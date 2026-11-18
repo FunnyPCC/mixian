@@ -1,13 +1,13 @@
-.mx-shop-status { border-radius: 24px; background: var(--surface); color: var(--muted); font-size: .76rem; }
+.mx-shop-status { border-radius: 24px; background: var(--surface); color: var(--muted); font-size: var(--text-caption); }
 .mx-shop-status .icon { width: 15px; height: 15px; color: var(--red); }
 .mx-list-card { padding: 11px 13px 3px; }
 .mx-product-row { display: grid; grid-template-columns: 55px minmax(0,1fr) auto; gap: 10px; align-items: center; width: 100%; text-align: start; padding: 0; }
 .mx-product-row .photo { width: 55px; }
-.mx-product-row strong { display: block; font-size: .95rem; overflow-wrap: anywhere; }
-.mx-product-row small { display: block; font-weight: 500; font-size: .78rem; }
+.mx-product-row strong { display: block; font-size: var(--text-body); overflow-wrap: anywhere; }
+.mx-product-row small { display: block; font-weight: 500; font-size: var(--text-secondary); }
 .mx-product-row > .icon { width: 16px; height: 16px; color: var(--muted); }
 .mx-inventory { display: grid; margin: 0; padding: 4px 9px; list-style: none; background: var(--canvas); border-radius: 9px; }
-.mx-inventory li { display: grid; grid-template-columns: minmax(0,1fr) minmax(52px,auto) minmax(62px,auto); align-items: center; gap: 6px; padding-block: 4px; font-size: .79rem; font-variant-numeric: tabular-nums; }
+.mx-inventory li { display: grid; grid-template-columns: minmax(0,1fr) minmax(52px,auto) minmax(62px,auto); align-items: center; gap: 6px; padding-block: 4px; font-size: var(--text-secondary); font-variant-numeric: tabular-nums; }
 .mx-inventory b { color: var(--red); }
 .mx-inventory small { text-align: end; }
 .mx-card-actions { border-top: 1px solid var(--edge); }
@@ -17,12 +17,20 @@
 .mx-rider-actions { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 6px; border-top: 1px solid var(--edge); padding: 8px 0; }
 .mx-rider-actions .ops-button { padding-inline: 4px; }
 .mx-summary > .ops-row { align-items: baseline; }
-.mx-summary > .ops-row span { font-size: .9rem; color: var(--muted); }
+.mx-summary > .ops-row span { font-size: var(--text-secondary); color: var(--muted); }
 .mx-summary > .ops-row strong { font-size: 1.78rem; line-height: 1.1; color: var(--red); font-variant-numeric: tabular-nums; }
-.mx-fees { display: flex; justify-content: space-between; gap: 8px; border-top: 1px solid var(--edge); padding-top: 8px; font-size: .81rem; color: var(--muted); }
+.mx-fees { display: flex; justify-content: space-between; gap: 8px; border-top: 1px solid var(--edge); padding-top: 8px; font-size: var(--text-secondary); color: var(--muted); }
 .mx-receiving { gap: 7px; }
 .mx-fields { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 8px; }
-.mx-check { display: flex; align-items: center; gap: 8px; min-height: 44px; font-size: .85rem; }
+.mx-fields .field { min-width: 0; }
+/* iOS WebKit can add horizontal padding outside a time input's declared width. */
+.mx-fields .field input[type=time] {
+  -webkit-appearance: none;
+  appearance: none;
+  max-width: 100%;
+  padding: 0;
+}
+.mx-check { display: flex; align-items: center; gap: 8px; min-height: 44px; font-size: var(--text-body); }
 .mx-check input { accent-color: var(--red); flex: none; }
 .mx-switch { justify-content: space-between; }
 .mx-switch small { display: block; margin-top: 2px; }
@@ -33,14 +41,14 @@
 .mx-editor { display: grid; gap: 18px; overflow-wrap: anywhere; }
 .mx-editor section { display: grid; gap: 10px; min-width: 0; }
 .mx-editor section + section { border-top: 1px solid var(--edge); padding-top: 16px; }
-.mx-editor h3 { font-size: .98rem; }
-.mx-meta { color: var(--muted); font-size: .75rem; }
+.mx-editor h3 { font-size: var(--text-section); }
+.mx-meta { color: var(--muted); font-size: var(--text-caption); }
 .mx-icon { display: inline-flex; align-items: center; }
 .mx-icon .icon { width: 16px; height: 16px; }
 .mx-sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
 .mx-page textarea[name=announcement] { resize: vertical; font-weight: 500; }
 .mx-editor-heading { display: flex; align-items: baseline; justify-content: space-between; gap: 8px; }
-.mx-editor-heading small { font-size: .76rem; font-variant-numeric: tabular-nums; }
+.mx-editor-heading small { font-size: var(--text-caption); font-variant-numeric: tabular-nums; }
 .mx-icon-control { display: grid; place-items: center; width: 44px; height: 44px; padding: 0; color: var(--muted); }
 .mx-icon-control .icon { width: 17px; height: 17px; }
 .mx-tags { display: grid; gap: 6px; }
@@ -48,7 +56,7 @@
 .mx-tag-input .mx-icon-control { background: var(--accent-soft); color: var(--red); }
 .mx-tag-list { display: flex; flex-wrap: wrap; gap: 6px; }
 .mx-tag-list:empty { display: none; }
-.mx-tag { display: inline-flex; align-items: center; max-width: 100%; padding-left: 10px; border-radius: 10px; background: var(--tone); font-size: .83rem; font-weight: 600; }
+.mx-tag { display: inline-flex; align-items: center; max-width: 100%; padding-left: 10px; border-radius: 10px; background: var(--tone); font-size: var(--text-secondary); font-weight: 600; }
 .mx-tag .mx-icon-control { flex: none; width: 44px; }
 .mx-tag .icon { width: 14px; height: 14px; }
 .mx-media-grid { display: grid; grid-template-columns: repeat(4,minmax(0,1fr)); align-items: start; gap: 7px; }
@@ -63,7 +71,7 @@
 .mx-media-tile.is-drag-source { opacity: .45; }
 .mx-media-tile.is-drop-target { outline: 2px solid var(--red); outline-offset: 2px; border-radius: 10px; }
 .mx-media-ghost { position: fixed; z-index: 3; opacity: .9; pointer-events: none; box-shadow: 0 4px 16px #291b1340; }
-.mx-media-add { display: grid; align-content: center; justify-items: center; gap: 3px; width: 100%; min-width: 0; min-height: 0; padding: 3px; aspect-ratio: 1; border: 1px dashed var(--edge); background: var(--tone); color: var(--muted); font-size: .75rem; line-height: 1.2; }
+.mx-media-add { display: grid; align-content: center; justify-items: center; gap: 3px; width: 100%; min-width: 0; min-height: 0; padding: 3px; aspect-ratio: 1; border: 1px dashed var(--edge); background: var(--tone); color: var(--muted); font-size: var(--text-caption); line-height: 1.2; }
 .mx-media-add .icon { width: 21px; height: 21px; color: var(--red); }
 .mx-qr-preview { display: block; width: 100%; aspect-ratio: 1; padding: 0; overflow: hidden; background: var(--tone); }
 .mx-qr-preview img { display: block; width: 100%; height: 100%; object-fit: contain; }
@@ -71,10 +79,10 @@
 .mx-editor-card { --tone: var(--surface); display: grid; gap: 8px; min-width: 0; margin: 0; padding: 10px; border: 0; border-radius: 12px; background: var(--canvas); }
 .mx-group-head { grid-template-columns: minmax(0,1fr) minmax(66px,.64fr) 44px; }
 .mx-choice { grid-template-columns: minmax(0,1fr) minmax(65px,.64fr) 44px; }
-.mx-choice-labels { padding-top: 8px; border-top: 1px solid var(--edge); color: var(--muted); font-size: .78rem; font-weight: 650; }
+.mx-choice-labels { padding-top: 8px; border-top: 1px solid var(--edge); color: var(--muted); font-size: var(--text-secondary); font-weight: 650; }
 .mx-inline { justify-self: start; }
 .mx-dispatch-options { display: grid; gap: 7px; min-width: 0; margin: 0; padding: 0; border: 0; }
-.mx-dispatch-options legend { padding: 0 0 7px; font-size: .85rem; font-weight: 700; }
+.mx-dispatch-options legend { padding: 0 0 7px; font-size: var(--text-body); font-weight: 700; }
 .mx-dispatch-option { display: grid; grid-template-columns: auto minmax(0,1fr) auto; align-items: center; gap: 10px; padding: 8px 10px; background: var(--canvas); border-radius: 12px; cursor: pointer; }
 .mx-dispatch-option small { display: block; }
 .mx-dispatch-option input { width: 18px; height: 18px; accent-color: var(--red); }
