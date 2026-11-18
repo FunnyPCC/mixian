@@ -1,0 +1,48 @@
+<!-- pages/courier/courier.wxml -->
+
+<view wx:if="{{!isCourier}}" class="card" style="margin-top:80rpx;">
+  <view class="center" style="font-size:34rpx; font-weight:700; margin-bottom:12rpx;">🛵 跑腿入口</view>
+  <view class="center muted" style="margin-bottom:24rpx;">输入店主提供的跑腿口令加入配送队</view>
+  <input class="input" type="number" maxlength="6" value="{{pin}}" bindinput="onPin" placeholder="跑腿口令" />
+  <button class="btn btn-pri btn-block" style="margin-top:24rpx;" bindtap="claim">进入跑腿模式</button>
+</view>
+
+<block wx:if="{{isCourier}}">
+  <view class="own-tabs">
+    <view class="own-tab {{tab === 'hall' ? 'own-tab-on' : ''}}" data-t="hall" bindtap="switchTab">任务大厅{{hall.length ? '(' + hall.length + ')' : ''}}</view>
+    <view class="own-tab {{tab === 'mine' ? 'own-tab-on' : ''}}" data-t="mine" bindtap="switchTab">我的配送{{mine.length ? '(' + mine.length + ')' : ''}}</view>
+  </view>
+
+  <block wx:if="{{tab === 'hall'}}">
+    <view class="muted" style="margin:16rpx 24rpx;">出餐完毕的订单会实时出现在这里，手快有手慢无</view>
+    <view class="card" wx:for="{{hall}}" wx:key="_id">
+      <view class="row"><view class="grow ord-no">{{item.order_no}}</view><view class="st st-WAIT">待取餐配送</view></view>
+      <view class="muted">送达时段 {{item.slot.start}}-{{item.slot.end}} · {{item.timeText}}下单</view>
+      <view wx:for="{{item.itemLines}}" wx:for-item="ln" wx:key="*this" class="ord-line">{{ln}}</view>
+      <view class="ord-cust">送到：{{item.cust.dorm}} {{item.cust.room}} · {{item.cust.name}}</view>
+      <view class="row" style="margin-top:14rpx;">
+        <view class="money-big grow">订单 ¥{{item.totalText}}</view>
+        <view class="btn btn-pri" data-i="{{index}}" bindtap="grab">抢单</view>
+      </view>
+    </view>
+    <view class="empty" wx:if="{{!hall.length}}">暂无待配送任务{{'\n'}}出餐后会实时推送到这里</view>
+  </block>
+
+  <block wx:if="{{tab === 'mine'}}">
+    <view class="card" wx:for="{{mine}}" wx:key="_id">
+      <view class="row">
+        <view class="grow ord-no">{{item.order_no}}</view>
+        <view class="st st-{{item.status === '待取餐' ? 'PICK' : item.status === '配送中' ? 'DELI' : 'DONE'}}">{{item.status}}</view>
+      </view>
+      <view class="muted">送达时段 {{item.slot.start}}-{{item.slot.end}}</view>
+      <view wx:for="{{item.itemLines}}" wx:for-item="ln" wx:key="*this" class="ord-line">{{ln}}</view>
+      <view class="ord-cust">送到：{{item.cust.dorm}} {{item.cust.room}} · {{item.cust.name}}{{item.cust.note ? ' · 备注:' + item.cust.note : ''}}</view>
+      <view class="row" style="margin-top:14rpx; gap:12rpx; justify-content:flex-end;">
+        <view class="btn btn-sm" wx:if="{{item.status !== '已完成'}}" data-p="{{item.cust.phone}}" bindtap="call">📞 联系顾客</view>
+        <view class="btn btn-sm btn-pri" wx:if="{{item.status === '待取餐'}}" data-i="{{index}}" bindtap="picked">已取餐，出发</view>
+        <view class="btn btn-sm btn-pri" wx:if="{{item.status === '配送中'}}" data-i="{{index}}" bindtap="delivered">确认送达</view>
+      </view>
+    </view>
+    <view class="empty" wx:if="{{!mine.length}}">还没有配送任务{{'\n'}}去任务大厅抢一单吧</view>
+  </block>
+</block>

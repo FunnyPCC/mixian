@@ -1,0 +1,167 @@
+<!-- pages/owner/owner.wxml -->
+
+<!-- 口令门禁 -->
+<view wx:if="{{!isOwner}}" class="card" style="margin-top:80rpx;">
+  <view class="center" style="font-size:34rpx; font-weight:700; margin-bottom:12rpx;">🧑‍🍳 店主入口</view>
+  <view class="center muted" style="margin-bottom:24rpx;">输入店主口令进入管理</view>
+  <input class="input" type="number" maxlength="6" value="{{pin}}" bindinput="onPin" placeholder="店主口令" />
+  <button class="btn btn-pri btn-block" style="margin-top:24rpx;" bindtap="claim">进入店主模式</button>
+</view>
+
+<block wx:if="{{isOwner}}">
+  <!-- 顶部Tab -->
+  <view class="own-tabs">
+    <view class="own-tab {{tab === 'orders' ? 'own-tab-on' : ''}}" data-t="orders" bindtap="switchTab">对账/订单{{pendCount ? '(' + pendCount + ')' : ''}}</view>
+    <view class="own-tab {{tab === 'menu' ? 'own-tab-on' : ''}}" data-t="menu" bindtap="switchTab">菜单</view>
+    <view class="own-tab {{tab === 'set' ? 'own-tab-on' : ''}}" data-t="set" bindtap="switchTab">设置</view>
+  </view>
+
+  <!-- ============ 对账/订单 ============ -->
+  <block wx:if="{{tab === 'orders'}}">
+    <view class="sec-title" wx:if="{{pendList.length}}">⚠️ 待确认收款（{{pendList.length}}）—— 先核对收款小精灵流水再确认</view>
+    <view class="card ord" wx:for="{{pendList}}" wx:key="_id" wx:for-index="idx">
+      <view class="row"><view class="grow ord-no">{{item.order_no}}</view><view class="st st-PEND">待确认收款</view></view>
+      <view class="muted">{{item.timeText}} · 顾客标记于 {{item.markTime || ''}}</view>
+      <view wx:for="{{item.itemLines}}" wx:for-item="ln" wx:key="*this" class="ord-line">{{ln}}</view>
+      <view class="ord-cust">{{item.custText}}</view>
+      <view class="row" style="margin-top:12rpx;" wx:if="{{item.proof_fileid}}">
+        <view class="btn btn-sm" data-f="{{item.proof_fileid}}" bindtap="previewProof">查看付款凭证截图</view>
+      </view>
+      <view class="row money-big" style="margin-top:12rpx;">应收 ¥{{item.totalText}}
+        <view class="grow"></view>
+        <view class="btn btn-sm btn-dgr" style="margin-right:12rpx;" data-op="notfound" data-i="{{idx}}" data-g="pend" bindtap="onAct">未查到款项</view>
+        <view class="btn btn-sm btn-pri" data-op="confirm" data-i="{{idx}}" data-g="pend" bindtap="onAct">✔ 确认到账</view>
+      </view>
+    </view>
+
+    <view class="sec-title" wx:if="{{todoList.length}}">待接单（{{todoList.length}}）</view>
+    <view class="card ord" wx:for="{{todoList}}" wx:key="_id" wx:for-index="idx">
+      <view class="row"><view class="grow ord-no">{{item.order_no}}</view><view class="st st-PAID">已收款</view></view>
+      <view class="muted">送达 {{item.slot.start}}-{{item.slot.end}}</view>
+      <view wx:for="{{item.itemLines}}" wx:for-item="ln" wx:key="*this" class="ord-line">{{ln}}</view>
+      <view class="ord-cust">{{item.custText}}</view>
+      <view class="row" style="margin-top:12rpx; justify-content:flex-end; gap:12rpx;">
+        <view class="btn btn-sm btn-dgr" data-op="reject" data-i="{{idx}}" data-g="todo" bindtap="onAct">拒单退款</view>
+        <view class="btn btn-sm btn-pri" data-op="accept" data-i="{{idx}}" data-g="todo" bindtap="onAct">接单制作</view>
+      </view>
+    </view>
+
+    <view class="sec-title" wx:if="{{doingList.length}}">进行中（{{doingList.length}}）</view>
+    <view class="card ord" wx:for="{{doingList}}" wx:key="_id" wx:for-index="idx">
+      <view class="row"><view class="grow ord-no">{{item.order_no}}</view><view class="st st-{{item.stClass}}">{{item.status}}</view></view>
+      <view class="muted">送达 {{item.slot.start}}-{{item.slot.end}}{{item.courier_name ? ' · 跑腿：' + item.courier_name : ''}}</view>
+      <view wx:for="{{item.itemLines}}" wx:for-item="ln" wx:key="*this" class="ord-line">{{ln}}</view>
+      <view class="ord-cust">{{item.custText}}</view>
+      <view class="row" style="margin-top:12rpx; justify-content:flex-end; gap:12rpx;" wx:if="{{item.acts.length}}">
+        <view wx:for="{{item.acts}}" wx:for-item="a" wx:key="op" class="btn btn-sm {{a.pri ? 'btn-pri' : ''}} {{a.dgr ? 'btn-dgr' : ''}}" data-op="{{a.op}}" data-i="{{idx}}" data-g="doing" bindtap="onAct">{{a.label}}</view>
+      </view>
+    </view>
+
+    <view class="sec-title" wx:if="{{doneList.length}}">今日其他（{{doneList.length}}）</view>
+    <view class="card ord" wx:for="{{doneList}}" wx:key="_id" wx:for-index="idx">
+      <view class="row"><view class="grow ord-no">{{item.order_no}}</view><view class="st st-{{item.stClass}}">{{item.status}}</view></view>
+      <view class="muted">{{item.timeText}} · ¥{{item.totalText}}</view>
+      <view class="row" style="margin-top:12rpx; justify-content:flex-end; gap:12rpx;" wx:if="{{item.acts.length}}">
+        <view wx:for="{{item.acts}}" wx:for-item="a" wx:key="op" class="btn btn-sm {{a.pri ? 'btn-pri' : ''}}" data-op="{{a.op}}" data-i="{{idx}}" data-g="done" bindtap="onAct">{{a.label}}</view>
+      </view>
+    </view>
+
+    <view class="empty" wx:if="{{!pendList.length && !todoList.length && !doingList.length && !doneList.length}}">还没有订单{{'\n'}}同学下单并标记付款后会出现在这里</view>
+  </block>
+
+  <!-- ============ 菜单 ============ -->
+  <block wx:if="{{tab === 'menu'}}">
+    <view class="card">
+      <view style="font-weight:700; margin-bottom:16rpx;">分类</view>
+      <view style="display:flex; flex-wrap:wrap; gap:12rpx; margin-bottom:16rpx;">
+        <view class="chip" wx:for="{{cats}}" wx:key="_id">
+          {{item.name}} <text style="color:#d64545; margin-left:10rpx;" data-id="{{item._id}}" catchtap="delCat">✕</text>
+        </view>
+      </view>
+      <view class="row" style="gap:12rpx;">
+        <input class="input grow" value="{{catName}}" bindinput="onCatName" placeholder="新分类名称" maxlength="6" />
+        <view class="btn btn-pri" bindtap="addCat">添加</view>
+      </view>
+    </view>
+
+    <view class="card">
+      <view style="font-weight:700; margin-bottom:8rpx;">菜品（口味/做法/加料在编辑里配置）</view>
+      <view class="o-dish" wx:for="{{dishes}}" wx:key="_id">
+        <view class="grow" style="min-width:0;">
+          <view style="font-weight:600;">{{item.emoji}} {{item.name}} · ¥{{item.price}}{{item.sold_out ? '（售罄中）' : ''}}</view>
+          <view class="muted">{{item.groupNames || ''}}</view>
+        </view>
+        <view class="row" style="gap:10rpx; flex-wrap:wrap; justify-content:flex-end;">
+          <view class="btn btn-sm" data-id="{{item._id}}" bindtap="editDish">编辑</view>
+          <view class="btn btn-sm" data-id="{{item._id}}" bindtap="toggleSold">{{item.sold_out ? '恢复在售' : '标记售罄'}}</view>
+          <view class="btn btn-sm btn-dgr" data-id="{{item._id}}" bindtap="delDish">删除</view>
+        </view>
+      </view>
+      <view class="empty" wx:if="{{!dishes.length}}">还没有菜品</view>
+    </view>
+    <view style="padding:0 20rpx 60rpx;">
+      <button class="btn btn-pri btn-block" bindtap="newDish">＋ 新增菜品</button>
+    </view>
+  </block>
+
+  <!-- ============ 设置 ============ -->
+  <block wx:if="{{tab === 'set'}}">
+    <view class="card" wx:if="{{store}}">
+      <view style="font-weight:700; margin-bottom:16rpx;">店铺信息</view>
+      <view class="field"><view class="field-label">窗口名称</view><input class="input" value="{{form.name}}" data-f="name" bindinput="onForm" /></view>
+      <view class="field"><view class="field-label">公告</view><input class="input" value="{{form.notice}}" data-f="notice" bindinput="onForm" /></view>
+      <view class="field"><view class="field-label">催单电话（展示给顾客）</view><input class="input" type="number" value="{{form.phone}}" data-f="phone" bindinput="onForm" placeholder="选填" /></view>
+      <view class="row" style="gap:16rpx;">
+        <view class="field grow"><view class="field-label">配送费(元)</view><input class="input" type="digit" value="{{form.delivery_fee}}" data-f="delivery_fee" bindinput="onForm" /></view>
+        <view class="field grow"><view class="field-label">起送金额(元)</view><input class="input" type="digit" value="{{form.min_order}}" data-f="min_order" bindinput="onForm" /></view>
+      </view>
+      <button class="btn btn-pri btn-block" bindtap="saveSet">保存设置</button>
+    </view>
+
+    <view class="card">
+      <view class="row" style="margin-bottom:8rpx;">
+        <view class="grow" style="font-weight:700;">营业开关</view>
+        <switch checked="{{store.open}}" color="#3aa655" bindchange="onOpen" />
+      </view>
+      <view class="muted">{{store.open ? '开店中，同学可下单' : '已打烊，同学只能浏览菜单'}}</view>
+    </view>
+
+    <view class="card">
+      <view style="font-weight:700; margin-bottom:8rpx;">公司收款码</view>
+      <view class="muted" style="margin-bottom:12rpx;">同学下单后看到这张码，钱直接进公司账户。点击更换。</view>
+      <image wx:if="{{store.qr_fileid}}" src="{{store.qr_fileid}}" mode="widthFix" style="width:240rpx; border-radius:16rpx;" bindtap="previewQr" />
+      <view class="warn-line" wx:else>还未上传收款码！同学下单后将看不到付款码</view>
+      <view class="row" style="gap:12rpx; margin-top:12rpx;">
+        <view class="btn btn-pri btn-sm" bindtap="uploadQr">{{store.qr_fileid ? '更换收款码' : '上传收款码'}}</view>
+      </view>
+      <view class="field" style="margin-top:16rpx;"><view class="field-label">付款引导文案</view><input class="input" value="{{form.qr_tip}}" data-f="qr_tip" bindinput="onForm" /></view>
+    </view>
+
+    <view class="card">
+      <view style="font-weight:700; margin-bottom:12rpx;">可配送时段</view>
+      <view class="slot-row" wx:for="{{store.slots}}" wx:key="id">
+        <view class="grow {{item.on ? '' : 'slot-off'}}">{{item.start}} — {{item.end}}</view>
+        <switch checked="{{item.on}}" color="#3aa655" data-i="{{index}}" bindchange="toggleSlot" style="transform:scale(.8);" />
+        <view class="btn btn-sm btn-dgr" data-i="{{index}}" bindtap="delSlot">删除</view>
+      </view>
+      <view class="row" style="gap:12rpx; margin-top:12rpx;">
+        <picker mode="time" value="{{slotStart}}" bindchange="onSlotStart"><view class="input" style="min-width:180rpx; text-align:center;">{{slotStart}}</view></picker>
+        <view style="align-self:center;">至</view>
+        <picker mode="time" value="{{slotEnd}}" bindchange="onSlotEnd"><view class="input" style="min-width:180rpx; text-align:center;">{{slotEnd}}</view></picker>
+        <view class="btn btn-pri" bindtap="addSlot">添加</view>
+      </view>
+    </view>
+
+    <view class="card">
+      <view style="font-weight:700; margin-bottom:12rpx;">配送模式</view>
+      <picker mode="selector" range="{{modeLabels}}" value="{{modeIndex}}" bindchange="onMode">
+        <view class="input row" style="justify-content:space-between;"><text>{{modeLabels[modeIndex]}}</text><text class="muted">▾</text></view>
+      </picker>
+      <view class="muted" style="margin-top:8rpx;">抢单制：出餐后发到任务大厅，跑腿自己抢。指派制：出餐后你手动指派。</view>
+      <view style="font-weight:700; margin:20rpx 0 8rpx;">跑腿人员（{{couriers.length}}）</view>
+      <view class="muted">跑腿同学在「跑腿」页输入你提供的口令加入配送队，之后显示在这里。</view>
+      <view class="chip" wx:for="{{couriers}}" wx:key="openid" style="margin:8rpx 8rpx 0 0;">{{item.nickname}}</view>
+    </view>
+    <view style="height:60rpx;"></view>
+  </block>
+</block>

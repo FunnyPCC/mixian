@@ -1,0 +1,2 @@
+/* pages/pay-qr/pay-qr.wxss */
+.copy-btn { color: #4a7fd4; font-size: 24rpx; margin-left: 12rpx; text-decoration: underline; }

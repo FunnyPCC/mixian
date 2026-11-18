@@ -1,0 +1,65 @@
+<!-- pages/menu/menu.wxml -->
+<view class="hd">
+  <view class="hd-name">{{store.name || '加载中…'}}</view>
+  <view class="hd-notice" wx:if="{{store.notice}}">{{store.notice}}</view>
+  <view class="hd-status {{store.open ? '' : 'hd-closed'}}">{{store.open ? '营业中 · 可下单' : '已打烊 · 仅供浏览'}}</view>
+</view>
+
+<view class="warn-line tip-line" wx:if="{{store && !store.open}}">窗口当前已打烊，菜单仅供浏览</view>
+
+<scroll-view class="cats" scroll-x enable-flex wx:if="{{cats.length}}">
+  <view wx:for="{{cats}}" wx:key="_id" class="chip {{item._id === curCatId ? 'chip-on' : ''}}" data-id="{{item._id}}" bindtap="onCat">{{item.name}}</view>
+</scroll-view>
+
+<view class="dish-list">
+  <view class="dish {{item.sold_out ? 'dish-out' : ''}}" wx:for="{{dishes}}" wx:key="_id" data-i="{{index}}" bindtap="openSpec">
+    <view class="d-ico">{{item.emoji || '🍽️'}}</view>
+    <view class="d-mid">
+      <view class="d-nm">{{item.name}}</view>
+      <view class="d-ds">{{item.desc}}</view>
+      <view class="d-pr">¥{{item.price}}</view>
+    </view>
+    <view class="d-add {{item.sold_out ? 'btn-dis' : ''}}">{{item.sold_out ? '已售罄' : (item.groups.length ? '选规格' : '加入')}}</view>
+  </view>
+  <view class="empty" wx:if="{{!dishes.length}}">这个分类还没有菜品{{'\n'}}店主请在「店主」页初始化并配置菜单</view>
+</view>
+
+<view style="height: 140rpx;"></view>
+
+<!-- 购物车底栏 -->
+<view class="bar">
+  <view class="cart-ico">🛒<view class="badge" wx:if="{{cartCount}}">{{cartCount}}</view></view>
+  <view class="grow">
+    <view class="bar-total">¥{{cartTotal}}</view>
+    <view class="bar-sub" wx:if="{{store}}">起送 ¥{{store.min_order}} · 配送费 ¥{{store.delivery_fee}}</view>
+  </view>
+  <view class="bar-go {{canGo ? '' : 'btn-dis'}}" bindtap="goCheckout">去结算</view>
+</view>
+
+<!-- 规格弹层 -->
+<view class="mask" wx:if="{{spec}}" bindtap="closeSpec"></view>
+<view class="sheet" wx:if="{{spec}}">
+  <view class="sheet-hd">
+    <view class="sheet-title">{{spec.dish.name}} · ¥{{spec.dish.price}}</view>
+    <view class="sheet-close" bindtap="closeSpec">✕</view>
+  </view>
+  <view class="muted" style="margin-bottom:16rpx;" wx:if="{{spec.dish.desc}}">{{spec.dish.desc}}</view>
+  <view class="grp" wx:for="{{spec.viewGroups}}" wx:for-item="g" wx:key="id">
+    <view class="grp-t">{{g.name}}<text class="tag {{g.need ? '' : 'tag-opt'}}">{{g.need ? '必选' : '可选'}}·{{g.mode === 'one' ? '单选' : '多选'}}</text></view>
+    <view class="opts">
+      <view wx:for="{{g.opts}}" wx:for-item="o" wx:key="id" class="opt {{o.on ? 'opt-on' : ''}}" data-g="{{g.id}}" data-o="{{o.id}}" bindtap="pickOpt">{{o.n}}{{o.p ? ' +¥' + o.p : ''}}</view>
+    </view>
+  </view>
+  <view class="row" style="justify-content:space-between; margin: 20rpx 0;">
+    <text class="muted">数量</text>
+    <view class="qty-row">
+      <view class="q-btn" bindtap="minus">－</view>
+      <view class="q-v">{{qty}}</view>
+      <view class="q-btn" bindtap="plus">＋</view>
+    </view>
+  </view>
+  <view class="row" style="gap: 20rpx;">
+    <view class="money-big grow">合计 ¥{{unitTotal}}</view>
+    <view class="btn btn-pri {{canAdd ? '' : 'btn-dis'}}" style="flex:1.4; min-height:88rpx;" bindtap="onAddCart">{{canAdd ? '加入购物车' : '请先选完必选项'}}</view>
+  </view>
+</view>

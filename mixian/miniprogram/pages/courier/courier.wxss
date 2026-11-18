@@ -1,0 +1,7 @@
+/* pages/courier/courier.wxss */
+.own-tabs { display: flex; background: #fff; border-bottom: 1rpx solid #eee5da; position: sticky; top: 0; z-index: 10; }
+.own-tab { flex: 1; text-align: center; padding: 24rpx 0; font-size: 28rpx; color: #9b8d82; border-bottom: 4rpx solid transparent; }
+.own-tab-on { color: #e85520; font-weight: 700; border-bottom-color: #ff6b35; }
+.ord-no { font-weight: 700; font-size: 28rpx; }
+.ord-line { font-size: 26rpx; padding: 4rpx 0; }
+.ord-cust { font-size: 25rpx; color: #9b8d82; border-top: 1rpx dashed #eee5da; margin-top: 10rpx; padding-top: 10rpx; }

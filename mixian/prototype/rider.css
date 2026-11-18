@@ -1,0 +1,21 @@
+.rx-destination { display: flex; gap: 8px; align-items: flex-start; min-width: 0; }
+.rx-destination > .icon { width: 17px; height: 17px; color: var(--red); margin-top: 4px; }
+.rx-destination strong { min-width: 0; display: block; font-size: 1.04rem; font-weight: 760; }
+.rx-page .ops-ticket-address strong { font-size: 1rem; }
+.rx-later { margin: -3px 0 2px; }
+.rx-window { display: flex; gap: 7px; align-items: center; padding: 8px 9px; background: var(--accent-soft); border-radius: 10px; color: var(--dark); font-variant-numeric: tabular-nums; font-size: .85rem; font-weight: 725; }
+.rx-window .icon { width: 16px; height: 16px; }
+.rx-address .rx-destination { align-items: center; gap: 9px; }
+.rx-address .rx-destination small { display: block; font-size: .75rem; }
+.rx-recipient { display: flex; flex-wrap: wrap; gap: 4px 10px; font-size: .82rem; color: var(--muted); }
+.rx-recipient b { color: var(--ink); }
+.rx-profile-head { display: flex; align-items: center; gap: 12px; min-width: 0; }
+.rx-profile-head h2 { font-size: 1.24rem; }
+.rx-profile-head .ops-glyph { width: 48px; height: 48px; }
+.rx-profile-head .icon { width: 23px; height: 23px; }
+.rx-profile-phone { display: flex; justify-content: space-between; align-items: baseline; flex-wrap: wrap; gap: 6px 10px; padding-top: 10px; border-top: 1px solid var(--edge); color: var(--muted); font-size: .87rem; }
+.rx-profile-phone b { color: var(--ink); font-variant-numeric: tabular-nums; }
+.rx-profile-actions { gap: 0; padding-block: 4px; }
+.rx-profile-actions button { justify-content: start; padding-inline: 0; border-radius: 0; color: var(--ink); }
+.rx-profile-actions button + button { border-top: 1px solid var(--edge); }
+body[data-role=rider] #tabs button { max-width: 200px; }

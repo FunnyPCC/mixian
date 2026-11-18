@@ -1,0 +1,20 @@
+<!-- pages/orders/orders.wxml -->
+<view class="empty" wx:if="{{loaded && !list.length}}">还没有订单{{'\n'}}去「点餐」页下一单吧</view>
+
+<view class="card ord" wx:for="{{list}}" wx:key="_id">
+  <view class="row">
+    <view class="grow" style="font-weight:700;">{{item.order_no}}</view>
+    <view class="st st-{{item.stClass}}">{{item.status}}</view>
+  </view>
+  <view class="muted" style="margin:8rpx 0;">{{item.timeText}} · 送达 {{item.slot.start}}-{{item.slot.end}}</view>
+  <view style="font-size:27rpx;">{{item.itemText}}</view>
+  <view class="muted" style="margin-top:6rpx;">送到：{{item.cust.dorm}} {{item.cust.room}}</view>
+  <view class="muted" wx:if="{{item.lastNote}}">最新：{{item.lastNote}}</view>
+  <view class="row" style="margin-top:16rpx; gap:16rpx;">
+    <view class="money-big grow">¥{{item.totalText}}</view>
+    <view class="btn btn-sm" wx:if="{{item.canCancel}}" data-i="{{index}}" bindtap="cancel">取消订单</view>
+    <view class="btn btn-sm btn-pri" wx:if="{{item.canPay}}" data-i="{{index}}" bindtap="goPay">去付款</view>
+    <view class="btn btn-sm btn-pri" wx:elif="{{item.canMark}}" data-i="{{index}}" bindtap="markPaid">我已付款</view>
+  </view>
+</view>
+<view style="height:40rpx;"></view>

@@ -1,0 +1,53 @@
+<!-- pages/dish-edit/dish-edit.wxml -->
+<view class="card">
+  <view style="font-weight:700; font-size:32rpx; margin-bottom:16rpx;">{{isEdit ? '编辑菜品' : '新增菜品'}}</view>
+  <view class="field"><view class="field-label">菜品名称</view>
+    <input class="input" value="{{dish.name}}" data-f="name" bindinput="onField" maxlength="14" placeholder="如：招牌牛肉拌面" /></view>
+  <view class="row" style="gap:16rpx;">
+    <view class="field grow"><view class="field-label">价格(元)</view>
+      <input class="input" type="digit" value="{{dish.price}}" data-f="price" bindinput="onField" placeholder="如 12" /></view>
+    <view class="field grow"><view class="field-label">所属分类</view>
+      <picker mode="selector" range="{{catLabels}}" value="{{catIndex}}" bindchange="onCat">
+        <view class="input row" style="justify-content:space-between;"><text>{{catLabels[catIndex] || '无分类'}}</text><text class="muted">▾</text></view>
+      </picker></view>
+  </view>
+  <view class="field"><view class="field-label">一句话介绍</view>
+    <input class="input" value="{{dish.desc}}" data-f="desc" bindinput="onField" maxlength="24" placeholder="如：手工碱面，慢卤4小时牛腩" /></view>
+  <view class="field"><view class="field-label">图标（点选或自己输入 emoji）</view>
+    <input class="input" value="{{dish.emoji}}" data-f="emoji" bindinput="onField" maxlength="4" />
+    <view style="display:flex; flex-wrap:wrap; gap:10rpx; margin-top:12rpx;">
+      <view wx:for="{{quick}}" wx:key="*this" class="emoji-btn" data-e="{{item}}" bindtap="pickEmoji">{{item}}</view>
+    </view>
+  </view>
+</view>
+
+<view class="card">
+  <view style="font-weight:700; margin-bottom:8rpx;">规格组（口味 / 做法 / 加料…）</view>
+  <view class="muted" style="margin-bottom:16rpx;">每组可设单选/多选、必选/可选；选项可单独加价（如 加牛腩 +6）</view>
+
+  <view class="g-box" wx:for="{{dish.groups}}" wx:for-item="g" wx:for-index="gi" wx:key="index">
+    <view class="row" style="gap:12rpx; margin-bottom:12rpx;">
+      <input class="input grow" value="{{g.name}}" data-g="{{gi}}" data-f="name" bindinput="onGroupField" placeholder="组名，如：口味" />
+      <picker mode="selector" range="{{['单选', '多选']}}" value="{{g.mode === 'many' ? 1 : 0}}" data-g="{{gi}}" bindchange="onGroupMode">
+        <view class="input" style="min-width:140rpx; text-align:center;">{{g.mode === 'many' ? '多选' : '单选'}}</view>
+      </picker>
+      <picker mode="selector" range="{{['必选', '可选']}}" value="{{g.need ? 0 : 1}}" data-g="{{gi}}" bindchange="onGroupNeed">
+        <view class="input" style="min-width:140rpx; text-align:center;">{{g.need ? '必选' : '可选'}}</view>
+      </picker>
+      <view class="btn btn-sm btn-dgr" data-g="{{gi}}" bindtap="delGroup">删组</view>
+    </view>
+    <view class="row" wx:for="{{g.opts}}" wx:for-item="o" wx:for-index="oi" wx:key="index" style="gap:12rpx; margin-bottom:10rpx;">
+      <input class="input grow" value="{{o.n}}" data-g="{{gi}}" data-o="{{oi}}" data-f="n" bindinput="onOptField" placeholder="选项名，如：微辣 / 加卤蛋" />
+      <input class="input" style="width:170rpx;" type="digit" value="{{o.p}}" data-g="{{gi}}" data-o="{{oi}}" data-f="p" bindinput="onOptField" placeholder="+元" />
+      <view class="btn btn-sm btn-dgr" data-g="{{gi}}" data-o="{{oi}}" bindtap="delOpt">✕</view>
+    </view>
+    <view class="btn btn-sm" data-g="{{gi}}" bindtap="addOpt">＋ 选项</view>
+  </view>
+
+  <view class="btn" style="margin-top:16rpx;" bindtap="addGroup">＋ 添加规格组</view>
+</view>
+
+<view style="padding: 0 20rpx 60rpx;">
+  <view class="err" style="margin-bottom:12rpx;">{{err}}</view>
+  <button class="btn btn-pri btn-block {{saving ? 'btn-dis' : ''}}" bindtap="save">{{saving ? '保存中…' : '保存菜品'}}</button>
+</view>

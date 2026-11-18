@@ -1,0 +1,33 @@
+{
+  "pages": [
+    "pages/menu/menu",
+    "pages/orders/orders",
+    "pages/owner/owner",
+    "pages/courier/courier",
+    "pages/checkout/checkout",
+    "pages/pay-qr/pay-qr",
+    "pages/dish-edit/dish-edit"
+  ],
+  "window": {
+    "navigationBarBackgroundColor": "#ff6b35",
+    "navigationBarTitleText": "麻辣电线送餐",
+    "navigationBarTextStyle": "white",
+    "backgroundColor": "#f5f3ef",
+    "enablePullDownRefresh": false
+  },
+  "tabBar": {
+    "color": "#9b8d82",
+    "selectedColor": "#ff6b35",
+    "backgroundColor": "#ffffff",
+    "borderStyle": "black",
+    "list": [
+      { "pagePath": "pages/menu/menu", "text": "点餐" },
+      { "pagePath": "pages/orders/orders", "text": "订单" },
+      { "pagePath": "pages/owner/owner", "text": "店主" },
+      { "pagePath": "pages/courier/courier", "text": "跑腿" }
+    ]
+  },
+  "style": "v2",
+  "sitemapLocation": "sitemap.json",
+  "lazyCodeLoading": "requiredComponents"
+}

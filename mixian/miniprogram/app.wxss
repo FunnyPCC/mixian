@@ -1,0 +1,65 @@
+/* app.wxss —— 全局样式 */
+page {
+  background: #f5f3ef;
+  color: #3b2f2a;
+  font-size: 28rpx;
+  line-height: 1.5;
+}
+.card { background: #fff; border-radius: 24rpx; padding: 24rpx; margin: 20rpx; border: 1rpx solid #eee5da; }
+.muted { color: #9b8d82; font-size: 24rpx; }
+.row { display: flex; align-items: center; }
+.grow { flex: 1; }
+.center { text-align: center; }
+
+.btn { display: inline-flex; align-items: center; justify-content: center; min-height: 72rpx; padding: 0 28rpx; border-radius: 16rpx; background: #fff; border: 1rpx solid #eee5da; font-size: 26rpx; box-sizing: border-box; }
+.btn-pri { background: #ff6b35; border-color: #ff6b35; color: #fff; font-weight: 600; }
+.btn-dgr { color: #d64545; }
+.btn-dis { background: #d8d0c6 !important; border-color: #d8d0c6 !important; color: #fff !important; }
+.btn-block { width: 100%; min-height: 88rpx; font-size: 30rpx; border-radius: 20rpx; }
+.btn-sm { min-height: 56rpx; padding: 0 18rpx; font-size: 24rpx; border-radius: 12rpx; }
+
+.chip { display: inline-flex; align-items: center; justify-content: center; padding: 12rpx 28rpx; border-radius: 999rpx; background: #fff; border: 1rpx solid #eee5da; font-size: 26rpx; flex-shrink: 0; }
+.chip-on { background: #ff6b35; border-color: #ff6b35; color: #fff; font-weight: 600; }
+
+.input { width: 100%; min-height: 80rpx; padding: 12rpx 20rpx; font-size: 30rpx; background: #fff; border: 1rpx solid #eee5da; border-radius: 16rpx; box-sizing: border-box; }
+.field { margin-bottom: 20rpx; }
+.field-label { font-size: 24rpx; color: #9b8d82; margin-bottom: 8rpx; }
+
+.tag { display: inline-block; font-size: 20rpx; color: #fff; background: #d9822b; border-radius: 8rpx; padding: 2rpx 12rpx; margin-left: 10rpx; vertical-align: middle; }
+.tag-opt { background: #b9ac9f; }
+
+.st { display: inline-block; font-size: 22rpx; color: #fff; border-radius: 8rpx; padding: 4rpx 14rpx; }
+.st-UNPAID { background: #b9ac9f; }
+.st-PEND { background: #d9822b; }
+.st-PAID { background: #4a7fd4; }
+.st-COOK { background: #8e6bd4; }
+.st-WAIT { background: #2f9e8f; }
+.st-PICK { background: #ff8c42; }
+.st-DELI { background: #ff6b35; }
+.st-DONE { background: #3aa655; }
+.st-C_REFUND { background: #d64545; }
+.st-C_DONE { background: #9b8d82; }
+.st-CLOSED { background: #c9c0b6; }
+
+.empty { padding: 100rpx 40rpx; text-align: center; color: #9b8d82; font-size: 26rpx; }
+
+.mask { position: fixed; inset: 0; background: rgba(30,20,10,.45); z-index: 40; }
+.sheet { position: fixed; left: 0; right: 0; bottom: 0; background: #f5f3ef; border-radius: 32rpx 32rpx 0 0; padding: 30rpx 30rpx calc(30rpx + env(safe-area-inset-bottom)); z-index: 50; max-height: 80vh; overflow-y: auto; box-sizing: border-box; }
+.sheet-hd { display: flex; align-items: center; margin-bottom: 16rpx; }
+.sheet-title { flex: 1; font-size: 34rpx; font-weight: 700; }
+.sheet-close { width: 72rpx; height: 72rpx; display: flex; align-items: center; justify-content: center; color: #9b8d82; font-size: 32rpx; }
+
+.grp { background: #fff; border: 1rpx solid #eee5da; border-radius: 20rpx; padding: 20rpx; margin-bottom: 16rpx; }
+.grp-t { font-size: 27rpx; font-weight: 700; margin-bottom: 14rpx; }
+.opts { display: flex; flex-wrap: wrap; gap: 14rpx; }
+.opt { padding: 12rpx 26rpx; border-radius: 14rpx; border: 1rpx solid #eee5da; background: #faf7f2; font-size: 26rpx; }
+.opt-on { border-color: #ff6b35; background: #fff1e8; color: #e85520; font-weight: 600; }
+
+.qty-row { display: flex; align-items: center; background: #fff; border: 1rpx solid #eee5da; border-radius: 16rpx; overflow: hidden; width: fit-content; }
+.q-btn { width: 84rpx; height: 76rpx; display: flex; align-items: center; justify-content: center; font-size: 34rpx; color: #e85520; }
+.q-v { min-width: 76rpx; text-align: center; font-weight: 700; }
+
+.money-line { display: flex; justify-content: space-between; padding: 8rpx 0; font-size: 27rpx; }
+.money-big { font-size: 32rpx; font-weight: 700; color: #e85520; }
+.warn-line { background: #fdf0e2; color: #d9822b; border-radius: 14rpx; padding: 14rpx 18rpx; font-size: 25rpx; margin: 12rpx 0; }
+.err { color: #d64545; font-size: 25rpx; min-height: 36rpx; }
