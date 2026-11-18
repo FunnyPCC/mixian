@@ -7,7 +7,7 @@ const opsEmpty = (title,glyph,copy='') => `<div class="ops-card ops-empty"><span
 const opsFooter = (...actions) => `<div class="ops-footer"><div>${actions.filter(Boolean).join('')}</div></div>`;
 const opsBack = (label,act='back-detail') => opsButton(label,act,'',{glyph:'arrow',variant:'ops-back'});
 const opsOrderRef = (order, time=order.events?.[0]?.[1]) => `<span class="ops-order-ref"><b>#${esc(order.number)}</b><time>${esc(order.date.slice(5).replace('-', '/'))}${time?` ${hhmm(time)}`:''}</time></span>`;
-const opsStatus = status => opsBadge(status, status==='已完成'?'is-good':status==='已取消'?'':status==='待核款'?'is-warn':'is-active');
+const opsStatus = status => `<span class="ops-badge" data-order-status="${esc(status)}">${esc(status)}</span>`;
 const opsOrderWindow = order => order.slot?`预约 ${order.slot}`:windowName(order);
 const opsOrderItems = order => `<div class="ops-item-list">${order.items.map(item=>`<div class="ops-item"><div><strong>${esc(item.name)}</strong><small>${esc(itemSpec(item))}</small></div><b>×${item.qty}</b></div>`).join('')}</div>`;
 const opsPhone = (label,phone) => phone?`<button type="button" class="ops-button ops-phone" data-act="contact" data-id="${esc(phone)}" aria-label="${esc(label)}">${icon('phone')}</button>`:'';

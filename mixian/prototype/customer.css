@@ -142,7 +142,6 @@ body[data-role=user] #tabs button:active { background: var(--accent-soft); }
 .cart-icon em { position: absolute; top: -4px; right: -4px; background: var(--red); border: 1px solid var(--surface); border-radius: 14px; min-width: 17px; padding: 0 3px; text-align: center; color: white; font: 750 10px/16px sans-serif; }
 .cart-dock .primary { min-width: 96px; }
 .has-cart { padding-bottom: 76px; }
-body[data-role=user]:has(.cart-dock) #notice { bottom: calc(var(--nav-height) + 80px + env(safe-area-inset-bottom)); }
 .resume-row { display: grid; grid-template-columns: auto minmax(0,1fr) auto; width: 100%; align-items: center; gap: 10px; text-align: left; background: var(--surface); border-radius: 14px; padding: 10px; margin-top: 12px; box-shadow: var(--shadow); }
 .resume-row b, .resume-row small { display: block; }
 .resume-row b { font-size: var(--text-secondary); }
@@ -261,9 +260,7 @@ body[data-role=user] .customer-order:active { background: #faf7f3; }
 .order-card-foot { border-top: 1px solid var(--edge); padding-top: 9px; }
 .order-card-foot b { font-size: 1.05rem; font-variant-numeric: tabular-nums; }
 .order-card-foot .icon { color: var(--muted); width: 17px; height: 17px; }
-.order-state { flex: none; display: inline-flex; align-items: center; gap: 4px; border-radius: 20px; background: var(--accent-soft); color: var(--dark); padding: 3px 7px; font-size: var(--text-caption); font-weight: 690; }
-.order-state[data-status=已完成] { background: #e9f2e9; color: var(--green); }
-.order-state[data-status=已取消] { background: var(--tone); color: var(--muted); }
+.order-state { flex: none; display: inline-flex; align-items: center; gap: 4px; border-radius: 20px; background: var(--order-status-bg, var(--tone)); color: var(--order-status-ink, var(--muted)); padding: 3px 7px; font-size: var(--text-caption); font-weight: 690; }
 .detail-page > .back-link { justify-self: start; margin-bottom: -6px; }
 .status-panel { display: grid; gap: 11px; }
 .status-heading { display: flex; align-items: center; justify-content: space-between; gap: 10px; }

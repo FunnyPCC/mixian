@@ -13,7 +13,10 @@ const prototypeRoutes = {user:['点餐','订单'],merchant:['订单','商品','�
 const orderFilter = () => role==='merchant'?'待核款':role==='rider'?'待接单':'全部';
 const formatOrderNumber = (date,number) => date.replaceAll('-','')+String(number).padStart(4,'0');
 const orderNumber = order => order.orderNo || formatOrderNumber(order.date,order.number);
-const orderNumberField = order => `<dl class="order-number-field"><dt>订单号</dt><dd>${esc(orderNumber(order))}</dd></dl>`;
+const orderNumberField = order => {
+  const number=esc(orderNumber(order));
+  return `<dl class="order-number-field"><dt>订单号</dt><dd><span>${number}</span><button type="button" data-act="copy-order-number" data-id="${number}" aria-label="复制订单号">${icon('copy')}</button></dd></dl>`;
+};
 const isClosedOrder = order => ['已完成','已取消'].includes(order.status);
 function orderClosedAt(order){
   if(!isClosedOrder(order))return null;
@@ -112,6 +115,30 @@ dialog.addEventListener('click',event=>{
   if(dismiss&&!busy)dialog.close();
 });
 function toast(text){$('#notice').textContent=text;clearTimeout(toastTimer);toastTimer=setTimeout(()=>$('#notice').textContent='',1000)}
+async function copyOrderNumber(number){
+  try{
+    if(navigator.clipboard?.writeText){
+      await navigator.clipboard.writeText(number);
+    }else{
+      const active=document.activeElement;
+      const source=document.createElement('textarea');
+      source.value=number;
+      source.readOnly=true;
+      Object.assign(source.style,{position:'fixed',inset:'0 auto auto 0',opacity:'0'});
+      document.body.append(source);
+      try{
+        source.select();
+        if(!document.execCommand('copy'))throw Error();
+      }finally{
+        source.remove();
+        active?.focus({preventScroll:true});
+      }
+    }
+    toast('订单号已复制');
+  }catch{
+    toast('复制失败，请长按订单号复制');
+  }
+}
 function change(page){view=page;detailId='';filter=page==='订单'?orderFilter():'全部';render();window.scrollTo(0,0)}
 function focusOpsHeading(){
   const heading=screen.querySelector('h1');
@@ -327,6 +354,7 @@ document.addEventListener('click',event=>{
   if(act==='category'){category=id;render();return;}
   if(act==='expire-session'){delete session[role];change(prototypeRoutes[role][0]);toast('请重新登录演示账号');return;}
   if(!isAuthed())return;
+  if(act==='copy-order-number'){copyOrderNumber(id);return;}
   if(act==='detail'){
     detailId=id;render();window.scrollTo(0,0);
     if(role!=='user')focusOpsHeading();

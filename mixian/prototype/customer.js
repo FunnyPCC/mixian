@@ -4,7 +4,7 @@ const backLink = (label,act,id='') => `<button type="button" class="back-link" d
 const glyphButton = (label,act,id,glyph,classes='',disabled=false) => `<button type="button" aria-label="${esc(label)}" data-act="${act}" data-id="${esc(id)}" class="icon-btn ${classes}" ${disabled?'disabled':''}>${icon(glyph)}</button>`;
 const menuName = line => line.image?(db.orderPhotos?.[line.image]||line.image):product(line.product)?.images[0]||'beef';
 const feeText = fee => fee ? '配送费 '+yuan(fee) : '免配送费';
-const orderStatus = status => `<span class="order-state" data-status="${status}"><i></i>${status}</span>`;
+const orderStatus = status => `<span class="order-state" data-order-status="${esc(status)}"><i></i>${esc(status)}</span>`;
 const canCheckout = () => isOpen() || !!(db.hold&&!db.hold.released);
 function countdown(expires){
   const seconds=Math.max(0,Math.ceil((expires-now())/1000));

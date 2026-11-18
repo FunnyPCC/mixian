@@ -83,10 +83,8 @@ body:is([data-role=merchant],[data-role=rider]) :is(button,summary,input,select)
 .ops-search-clear[hidden] { display: none; }
 .ops-search-clear .icon { width: 16px; height: 16px; }
 .ops-search-count { margin: 0 0 8px 2px; }
-.ops-badge { display: inline-flex; flex: none; align-items: center; border-radius: 20px; padding: 3px 8px; background: var(--tone); color: var(--muted); font-size: var(--text-caption); font-weight: 700; }
+.ops-badge { display: inline-flex; flex: none; align-items: center; border-radius: 20px; padding: 3px 8px; background: var(--order-status-bg, var(--tone)); color: var(--order-status-ink, var(--muted)); font-size: var(--text-caption); font-weight: 700; }
 .ops-badge.is-good { background: #e9f2e9; color: #245b43; }
-.ops-badge.is-active { background: var(--accent-soft); color: var(--dark); }
-.ops-badge.is-warn { background: #faf0dc; color: #714313; }
 .ops-order-ref { display: flex; flex-wrap: wrap; align-items: center; gap: 3px 7px; font-variant-numeric: tabular-nums; }
 .ops-order-ref b { padding: 2px 6px; background: var(--tone); border-radius: 5px; font-size: var(--text-caption); }
 .ops-order-ref time { color: var(--muted); font-size: var(--text-caption); white-space: nowrap; }
@@ -158,7 +156,6 @@ body:is([data-role=merchant],[data-role=rider]) .field :is(input:not([type=check
 body:is([data-role=merchant],[data-role=rider]) #dialog .section-title { font-size: var(--text-dialog); }
 body:is([data-role=merchant],[data-role=rider]) #dialog .dialog-body { gap: 10px; }
 body:is([data-role=merchant],[data-role=rider]) #dialog .callout { border: 0; background: #faf1e2; }
-body:is([data-role=merchant],[data-role=rider]) #notice { top: calc(8px + env(safe-area-inset-top)); bottom: auto; pointer-events: none; }
 @media (max-width: 600px) {
   body:is([data-role=merchant],[data-role=rider]) #dialog { --dialog-height: 88dvh; --dialog-inset: var(--ops-space); --dialog-bottom: calc(14px + env(safe-area-inset-bottom)); margin: auto 0 0; width: 100%; max-width: none; border-radius: 21px 21px 0 0; }
 }
