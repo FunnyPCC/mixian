@@ -158,17 +158,11 @@ body:is([data-role=merchant],[data-role=rider]) :is(button,summary,input,select)
 body:is([data-role=merchant],[data-role=rider]) .field :is(input:not([type=checkbox]):not([type=file]),select,textarea) {
   min-width: 0; min-height: 44px; border-color: transparent; background: var(--tone); font-size: 16px; color: var(--ink);
 }
-body:is([data-role=merchant],[data-role=rider]) #dialog { border: 0; background: var(--surface); overscroll-behavior: contain; overflow: hidden; }
 body:is([data-role=merchant],[data-role=rider]) #dialog .section-title { font-size: 1.23rem; }
-.ops-dialog-form { display: grid; grid-template-rows: auto minmax(0,1fr) auto; gap: 8px; max-height: calc(85dvh - 44px); }
-.ops-dialog-body { display: grid; align-content: start; gap: 10px; overflow-y: auto; overscroll-behavior: contain; scroll-padding-block: 8px; padding: 6px; margin-inline: -6px; }
-.ops-dialog-actions { display: grid; gap: 6px; }
-.ops-dialog-actions:has(> :only-child[hidden]) { display: none; }
+body:is([data-role=merchant],[data-role=rider]) #dialog .dialog-body { gap: 10px; }
 body:is([data-role=merchant],[data-role=rider]) #dialog .callout { border: 0; background: #faf1e2; }
 body:is([data-role=merchant],[data-role=rider]) #notice { top: calc(8px + env(safe-area-inset-top)); bottom: auto; pointer-events: none; }
 @media (max-width: 600px) {
-  body:is([data-role=merchant],[data-role=rider]) #dialog { margin: auto 0 0; width: 100%; max-width: none; max-height: 88dvh; border-radius: 21px 21px 0 0; padding: 14px var(--ops-space) calc(14px + env(safe-area-inset-bottom)); }
-  .ops-dialog-form { max-height: calc(88dvh - 28px - env(safe-area-inset-bottom)); }
-  body:is([data-role=merchant],[data-role=rider]):has(dialog[open]) { overflow: hidden; }
+  body:is([data-role=merchant],[data-role=rider]) #dialog { --dialog-height: 88dvh; --dialog-inset: var(--ops-space); --dialog-bottom: calc(14px + env(safe-area-inset-bottom)); margin: auto 0 0; width: 100%; max-width: none; border-radius: 21px 21px 0 0; }
 }
 @media (max-width: 350px) { body:is([data-role=merchant],[data-role=rider]) { --ops-space: 12px; } }

@@ -436,24 +436,18 @@ function merchantPage(){
   return `<div class="stack"><span class="eyebrow">商家工作台 / 今日履约</span><h2 class="section-title">订单工作台</h2><div class="kpis">${states.slice(0,3).map(status=>`<button data-act="filter" data-id="${status}"><b>${db.orders.filter(order=>order.status===status).length}</b>${status}</button>`).join('')}</div>${pills(['全部',...states],filter,'filter')}${orderList(db.orders.filter(order=>filter==='全部'||order.status===filter))}</div>`;
 }
 function riderPage(){const rider=currentRider();const list=db.orders.filter(order=>view==='待接单'?canTake(order):order.rider===rider.id&&order.status===(view==='我的配送'?'配送中':'已完成'));return `<div class="stack"><div class="row spread"><span class="eyebrow">配送工作台 / ${esc(rider.name)}</span>${btn('切换账号','expire-session','','quiet')}</div><h2 class="section-title">${view}</h2>${view==='待接单'?callout('仅显示已核款且进入接单窗口的订单。接单前隐藏完整地址与联系方式。'):''}${orderList(list,view==='待接单')}</div>`}
-function modal(title,body,handler,label='确认',{sessionOnly=false}={}){
+function modal(title,body,handler,label='确认',{sessionOnly=false,sheet=false,caption='',footer=''}={}){
   dialogHandler=handler;
   dialogSessionOnly=sessionOnly;
   dialog.setAttribute('aria-labelledby','modal-title');
+  dialog.classList.toggle('customer-sheet',role==='user'&&sheet);
   const wasOpen=dialog.open;
-  const header=`<div class="row spread"><h2 id="modal-title" class="section-title">${title}</h2><button type="button" class="icon-btn quiet" data-act="close" aria-label="关闭">${icon('close')}</button></div>`;
-  const actions=`<p id="modal-error" class="danger" role="alert" hidden></p>${handler?`<button class="primary wide">${label}</button>`:''}`;
-  if(role==='user')dialog.innerHTML=`<form id="modal-form" class="stack">${header}${body}${actions}</form>`;
-  else{
-    if(!wasOpen)opsDialogOpener=document.activeElement;
-    dialog.innerHTML=`<form id="modal-form" class="ops-dialog-form">${header}<div class="ops-dialog-body">${body}</div><div class="ops-dialog-actions">${actions}</div></form>`;
-  }
+  if(!wasOpen&&role!=='user')opsDialogOpener=document.activeElement;
+  const header=`<header class="dialog-header"><div class="row spread"><h2 id="modal-title" class="section-title" tabindex="-1" autofocus>${title}</h2><button type="button" class="icon-btn quiet" data-act="close" aria-label="关闭">${icon('close')}</button></div>${caption}</header>`;
+  const actions=`${footer}<p id="modal-error" class="danger" role="alert" hidden></p>${handler?`<button type="submit" class="primary wide">${label}</button>`:''}`;
+  dialog.innerHTML=`<form id="modal-form" class="dialog-form">${header}<div class="dialog-body">${body}</div><div class="dialog-footer">${actions}</div></form>`;
   if(!wasOpen)dialog.showModal();
-  else if(role!=='user'){
-    const heading=dialog.querySelector('#modal-title');
-    heading.tabIndex=-1;
-    heading.focus({preventScroll:true});
-  }
+  dialog.querySelector('#modal-title').focus({preventScroll:true});
 }
 function chooseSku(item){
   modal(esc(item.name),`<div class="row">${btn('‹','photo',item.id)}<div id="sku-photo" style="flex:1">${photo(item.images[photoIndex%item.images.length],true)}</div>${btn('›','photo',item.id)}</div><p>${esc(item.desc)}</p>${select('规格','sku',item.skus.map(sku=>[sku.id,`${sku.name} · ${yuan(sku.price)} · ${sku.stock?'可售 '+sku.stock:'售罄'}`]))}${field('数量','qty',1,'type="number" min="1" required')}`,data=>{

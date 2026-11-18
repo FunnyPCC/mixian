@@ -156,15 +156,13 @@ function editAddress(){
       const address=data.address.trim(), person=data.person.trim();
       if(!address||!person)throw Error('请填写宿舍地址和收货人。');
       Object.assign(customerDraft,{address,person,phone:data.phone});
-    },'保存收货信息');
-  dialog.classList.add('customer-sheet');
+    },'保存收货信息',{sheet:true});
 }
 function editNote(){
   const note=customerDraft.note??db.receiving.note??'';
   modal('备注',`<label class="field sheet-fields">给商家和骑手的备注（选填）<textarea name="note" rows="4" maxlength="100" placeholder="例如：到楼下请联系">${esc(note)}</textarea></label>`,data=>{
     customerDraft.note=data.note.trim();
-  },'保存备注');
-  dialog.classList.add('customer-sheet');
+  },'保存备注',{sheet:true});
 }
 function checkoutSlots(){
   const times=slots(), hold=db.hold;
@@ -176,8 +174,7 @@ function pickSlot(){
   if(!selectInput)return;
   const times=checkoutSlots();
   if(!times.length){toast('今天没有可预约的时段，请选择尽快送达。');return;}
-  modal('选择送达时段',`<p class="sheet-hint">今天 · 每个时段 30 分钟</p><div class="time-list" role="group" aria-label="可预约时段" tabindex="0">${times.map(([time,label])=>`<button type="button" data-act="set-slot" data-id="${time}" aria-pressed="${selectInput.value===String(time)}"><span>${esc(label)}</span>${selectInput.value===String(time)?icon('check'):''}</button>`).join('')}</div>`);
-  dialog.classList.add('customer-sheet');
+  modal('选择送达时段',`<p class="sheet-hint">今天 · 每个时段 30 分钟</p><div class="time-list" role="group" aria-label="可预约时段">${times.map(([time,label])=>`<button type="button" data-act="set-slot" data-id="${time}" aria-pressed="${selectInput.value===String(time)}"><span>${esc(label)}</span>${selectInput.value===String(time)?icon('check'):''}</button>`).join('')}</div>`,null,undefined,{sheet:true});
   dialog.querySelector('.time-list [aria-pressed=true]')?.scrollIntoView({block:'nearest'});
 }
 
@@ -236,12 +233,10 @@ chooseSku = function(item){
     return {...sku,remaining:Math.max(0,cartStock(line)-skuQuantity(db.cart,line))};
   });
   const current=variants.find(sku=>sku.remaining>0);
-  modal(esc(item.name),`<div class="sku-tags">${sellingTags(item)}</div>
-    <div class="sku-visual"><div id="sku-photo">${photo(item.images[photoIndex%item.images.length],true)}</div>
+  modal(esc(item.name),`<div class="sku-visual"><div id="sku-photo">${photo(item.images[photoIndex%item.images.length],true)}</div>
     ${item.images.length>1?`<div class="photo-controls">${glyphButton('上一张','photo',item.id,'chevron-left')}${glyphButton('下一张','photo',item.id,'chevron')}</div>`:''}</div>
     <fieldset class="sku-set"><legend>选择规格</legend><div>${variants.map(sku=>`<label><input type="radio" name="sku" value="${esc(sku.id)}" data-price="${sku.price}" data-stock="${sku.remaining}" required ${sku.remaining?'':'disabled'} ${sku===current?'checked':''}><span><b>${esc(sku.name)}</b><small>${sku.remaining?yuan(sku.price):sku.stock?'已选满':'售罄'}</small></span></label>`).join('')}</div></fieldset>
-    ${current?`${attributeFields(item)}<div class="sku-quantity"><b>数量</b><div class="stepper">${glyphButton('减少数量','qty-minus','','minus')}<input name="qty" aria-label="数量" value="1" readonly>${glyphButton('增加数量','qty-plus','','plus')}</div></div>
-    <div class="sku-summary"><span id="sku-stock" aria-live="polite"></span><output id="sku-total"></output></div>`:callout('该菜品的可售数量已全部选入购物袋。可在购物袋中调整。')}`,current?data=>{
+    ${current?`${attributeFields(item)}<div class="sku-quantity"><b>数量</b><div class="stepper">${glyphButton('减少数量','qty-minus','','minus')}<input name="qty" aria-label="数量" value="1" readonly>${glyphButton('增加数量','qty-plus','','plus')}</div></div>`:callout('该菜品的可售数量已全部选入购物袋。可在购物袋中调整。')}`,current?data=>{
     const sku=item.skus.find(entry=>entry.id===data.sku), count=Number(data.qty);
     const selected=Array.from(dialog.querySelectorAll('input[name^="attr-"]:checked'),input=>input.value);
     const options=chosenAttributes(item,selected).map(choice=>choice.id);
@@ -251,14 +246,11 @@ chooseSku = function(item){
     if(line)line.qty+=count;else db.cart.push(candidate);
     markCartChanged();
     toast(`已加入 ${count} 件`);
-  }:null,'加入购物袋');
-  dialog.classList.add('customer-sheet');
-  if(current){
-    const footer=document.createElement('div');
-    footer.className='sku-footer';
-    footer.append(dialog.querySelector('.sku-summary'),dialog.querySelector('#modal-error'),dialog.querySelector('button.primary'));
-    dialog.querySelector('form').append(footer);
-  }
+  }:null,'加入购物袋',{
+    sheet:true,
+    caption:sellingTags(item),
+    footer:current?'<div class="sku-summary"><span id="sku-stock" aria-live="polite"></span><output id="sku-total"></output></div>':''
+  });
   updateSku();
 };
 cartDialog = function(){
@@ -272,10 +264,11 @@ cartDialog = function(){
       return `<div class="food-row cart-line">${photo(menuName(line))}<div><b>${esc(line.name)}</b><small>${esc(itemSpec(line))}</small><strong>${yuan(line.price)}</strong>
       ${inactive||attributesChanged||stock<selected?`<small class="danger">${inactive?'商品已下架':attributesChanged?'属性已调整，请移除后重选':`当前可售 ${stock} 件`}</small>`:''}</div>
       <div class="stepper">${glyphButton('减少数量','cart-minus',index,'minus')}<b>${line.qty}</b>${glyphButton('增加数量','cart-plus',index,'plus','',inactive||attributesChanged||stock<=selected)}</div></div>`;
-    }).join('')}</div>
-    <div class="action-bar">${amountBlock('商品小计',subtotal(cart))}${btn('去结算','checkout','','primary',!canCheckout())}</div>`:
-    emptyCustomer('bag','购物袋是空的','选一道喜欢的米线，加进购物袋再结算。',btn('继续选餐','close','','soft-button')));
-  dialog.classList.add('customer-sheet');
+    }).join('')}</div>`:
+    emptyCustomer('bag','购物袋是空的','选一道喜欢的米线，加进购物袋再结算。',btn('继续选餐','close','','soft-button')),null,undefined,{
+    sheet:true,
+    footer:cart.length?`<div class="cart-sheet-footer">${amountBlock('商品小计',subtotal(cart))}${btn('去结算','checkout','','primary',!canCheckout())}</div>`:''
+  });
 };
 function updateSku(delta=0){
   const sku=dialog.querySelector('input[name=sku]:checked');
@@ -290,7 +283,6 @@ function updateSku(delta=0){
   dialog.querySelector('#sku-stock').textContent=limit<=3?`商品小计 · 还可选 ${limit} 件`:'商品小计';
 }
 dialog.addEventListener('change',event=>{if(event.target.name==='sku'||event.target.name.startsWith('attr-'))updateSku();});
-dialog.addEventListener('close',()=>{if(!dialog.open)dialog.classList.remove('customer-sheet');});
 document.addEventListener('input',event=>{
   const input=event.target;
   if(input.closest('.checkout-form')&&input.name==='mode')customerDraft.mode=input.value;
